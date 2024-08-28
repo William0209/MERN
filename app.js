@@ -1,11 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
 // middleware
 app.use(express.static("public"));
-
+app.use(express.json());
 // view engine
 app.set("view engine", "ejs");
 
@@ -19,21 +20,14 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    console.log(
-      "Connected to the database"
-    );
+    console.log("Connected to the database");
     app.listen(3000, () => {
-      console.log(
-        "Server is running on port 3000"
-      );
+      console.log("Server is running on port 3000");
     });
   })
   .catch((err) => console.log(err));
 
 // routes
-app.get("/", (req, res) =>
-  res.render("home")
-);
-app.get("/smoothies", (req, res) =>
-  res.render("smoothies")
-);
+app.get("/", (req, res) => res.render("home"));
+app.get("/smoothies", (req, res) => res.render("smoothies"));
+app.use(authRoutes);
